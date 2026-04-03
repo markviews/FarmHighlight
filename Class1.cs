@@ -65,6 +65,32 @@ namespace LethalCompanyModTemplate
             Drone drone = sim.farm.drones[droneId];
             Material mat = colors["green"];
             float seconds = -1;
+            Vector2Int pos = drone.pos;
+
+            if (parameters.Count > 2)
+            {
+                string arg2 = CodeUtilities.ToNiceString(parameters[1], 0, null, false);
+                if (Int32.TryParse(arg2, out int outX))
+                {
+                    pos.x = outX;
+                }
+                else
+                {
+                    // TODO throw correct error (invalid number)
+                    throw new ExecuteException("error_empty_print", -1, -1);
+                }
+
+                string arg3 = CodeUtilities.ToNiceString(parameters[2], 0, null, false);
+                if (Int32.TryParse(arg3, out int outY))
+                {
+                    pos.y = outY;
+                }
+                else
+                {
+                    // TODO throw correct error (invalid number)
+                    throw new ExecuteException("error_empty_print", -1, -1);
+                }
+            }
 
             if (parameters.Count > 0)
             {
@@ -72,9 +98,9 @@ namespace LethalCompanyModTemplate
 
                 if (arg1 == "none")
                 {
-                    if (HighlightClass.highlights.ContainsKey(drone.pos))
+                    if (HighlightClass.highlights.ContainsKey(pos))
                     {
-                        HighlightClass.highlights.Remove(drone.pos);
+                        HighlightClass.highlights.Remove(pos);
                     }
                     return 0.0;
                 }
@@ -91,22 +117,22 @@ namespace LethalCompanyModTemplate
                 }
 
             }
-            if (parameters.Count > 1)
+
+            if (parameters.Count > 3)
             {
-                string arg2 = CodeUtilities.ToNiceString(parameters[1], 0, null, false);
-                if (float.TryParse(arg2, out float outSeconds))
+                string arg4 = CodeUtilities.ToNiceString(parameters[3], 0, null, false);
+                if (float.TryParse(arg4, out float outSeconds))
                 {
                     seconds = outSeconds;
                 }
-
-                // TODO throw correct error (invalid number)
                 else
                 {
+                    // TODO throw correct error (invalid number)
                     throw new ExecuteException("error_empty_print", -1, -1);
                 }
             }
 
-            HighlightClass.SpawnHighlight(drone.pos, mat, seconds);
+            HighlightClass.SpawnHighlight(pos, mat, seconds);
             return 0.0;
         }
 
